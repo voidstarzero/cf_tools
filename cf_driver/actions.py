@@ -17,6 +17,12 @@ def LOOKUP_ONCE(seq, key):
     else:
         raise ValueError("Multiple results: " + repr(seq))
 
+def FILTER_KEY(seq, key):
+    ret = []
+    for item in seq:
+        ret.append(item[key])
+    return ret
+
 def SET_UNLESS_NONE(map, key, value):
     if value is not None:
         map[key] = value
@@ -56,6 +62,15 @@ def get_record_id(token, zone_id, record_name, record_type='A'):
 
     result = endpoints.list_dns_records(token, zone_id, query)
     return LOOKUP_ONCE(result, "id")
+
+def query_record_ids(token, zone_id, record_name=None, record_type=None):
+    query = {}
+
+    SET_UNLESS_NONE(query, "name", record_name)
+    SET_UNLESS_NONE(query, "type", record_type)
+
+    result = endpoints.list_dns_records(token, zone_id, query)
+    return FILTER_KEY(result, "id")
 
 def change_record(token, zone_id, record_id,
     record_name=None, record_type=None, record_content=None,

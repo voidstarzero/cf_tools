@@ -9,6 +9,7 @@ from .actions import (
 	list_all_records,
 	create_record,
 	get_record_id,
+	query_record_ids,
 	change_record,
 	delete_record,
 )

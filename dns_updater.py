@@ -10,9 +10,6 @@ import sys
 
 ################################################################################
 
-def update_record_address(token, zone_id, host_id, address):
-	pass
-
 def usage():
 	text = ("""dns_updater.py - Update a dynamic DNS entry
 

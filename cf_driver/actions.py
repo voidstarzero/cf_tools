@@ -34,15 +34,15 @@ def list_all_records(token, zone_id):
 
 def create_record(token, zone_id,
     record_name, record_type, record_content,
-    record_ttl=1, record_priority=None, record_proxied=None):
+    record_ttl=None, record_priority=None, record_proxied=None):
     
     details = {
         "name": record_name,
         "type": record_type,
         "content": record_content,
-        "ttl": record_ttl,
     }
 
+    SET_UNLESS_NONE(details, "ttl", record_ttl)
     SET_UNLESS_NONE(details, "priority", record_priority)
     SET_UNLESS_NONE(details, "proxied", record_proxied)
 

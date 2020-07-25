@@ -24,24 +24,39 @@ Required environment variables:
 - CF_RECORD_ID or CF_RECORD_NAME: The id or full name of the target record""")
 
 	print(text, file=sys.stderr)
+	exit(1)
 
 def run():
 	if len(sys.argv) != 2:
 		usage()
-		exit(1)
 
 	address = sys.argv[1]
 
-	token = os.environ['CF_TOKEN']
+	try:
+		token = os.environ['CF_TOKEN']
+	except KeyError:
+		usage()
 
 	zone_id = os.environ.get('CF_ZONE_ID')
 	if zone_id is None:
-		zone_name = os.environ['CF_ZONE_NAME']
+		try:
+			zone_name = os.environ['CF_ZONE_NAME']
+		except KeyError:
+			usage()
+
 		zone_id = cf_driver.get_zone_id(token, zone_name)
+
+	if zone_id is None: # Doesn't match anything existing
+		print(f"No matching zone for {zone_name}, does it exist?", file=sys.stderr)
+		exit(1)
 
 	record_id = os.environ.get('CF_RECORD_ID')
 	if record_id is None:
-		record_name = os.environ['CF_RECORD_NAME']
+		try:
+			record_name = os.environ['CF_RECORD_NAME']
+		except KeyError:
+			usage()
+
 		record_id = cf_driver.get_record_id(token, zone_id, record_name, 'A')
 
 	if record_id is None: # returns None if not existant

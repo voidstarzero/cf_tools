@@ -42,10 +42,10 @@ def run():
 	record_id = os.environ.get('CF_RECORD_ID')
 	if record_id is None:
 		record_name = os.environ['CF_RECORD_NAME']
-		record_id = cf_driver.get_record_id(token, zone_id, record_name)
+		record_id = cf_driver.get_record_id(token, zone_id, record_name, 'A')
 
 	if record_id is None: # returns None if not existant
-		cf_driver.create_record(token, zone_id, 'A', record_name, address)
+		cf_driver.create_record(token, zone_id, record_name, 'A', address)
 		print(f"Created A record for {record_name} -> {address}")
 	else:
 		cf_driver.change_record(token, zone_id, record_id, record_content=address)

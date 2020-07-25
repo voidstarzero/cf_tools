@@ -15,6 +15,8 @@ def usage():
 
 usage: python3 zone_loder.py path/to/zonefile.domain
 
+*Compatible only with A, AAAA and CNAME records without explicit TTLs.*
+
 Required environment variables:
 - CF_TOKEN: Your Cloudflare API token
 - CF_ZONE_ID or CF_ZONE_NAME: The id or name of the target zone""")
@@ -47,8 +49,6 @@ def run():
 
 		# Now we know the zone, time to run the import
 		record_name = ""
-		record_type = ""
-		record_content = ""
 
 		for line in zonefile:
 			fields = [s for s in line.split() if s]
